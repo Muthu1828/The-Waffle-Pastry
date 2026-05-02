@@ -2,17 +2,29 @@
 
 import React, { useState, useEffect } from 'react'
 import { Search, Filter, Star, ShoppingBag, Loader2 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import API from '../../lib/api'
 import { useCart } from '../../context/CartContext'
 import { toast } from 'react-hot-toast'
 
+import { useSearchParams } from 'next/navigation'
+
 const ShopPage = () => {
+  const searchParams = useSearchParams()
+  const categoryParam = searchParams.get('category')
+  
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState('All')
+  const [activeCategory, setActiveCategory] = useState(categoryParam || 'All')
   const categories = ['All', 'Cakes', 'Waffles', 'Pastries']
   
   const { addToCart } = useCart()
+
+  useEffect(() => {
+    if (categoryParam) {
+      setActiveCategory(categoryParam)
+    }
+  }, [categoryParam])
 
   useEffect(() => {
     fetchProducts()
@@ -80,8 +92,15 @@ const ShopPage = () => {
               </div>
            ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
-                 {filteredProducts.map(product => (
-                    <div key={product._id} className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border border-primary/10">
+                 {filteredProducts.map((product, index) => (
+                    <motion.div 
+                      key={product._id}
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ delay: (index % 3) * 0.1 }}
+                      viewport={{ once: true }}
+                      className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border border-primary/10"
+                    >
                        <div className="relative h-64 bg-primary/5 overflow-hidden">
                           {product.image ? (
                             <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
@@ -104,7 +123,7 @@ const ShopPage = () => {
                              Add to Cart <ShoppingBag size={16} />
                           </button>
                        </div>
-                    </div>
+                    </motion.div>
                  ))}
               </div>
            )}

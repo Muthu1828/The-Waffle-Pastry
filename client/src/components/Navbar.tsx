@@ -21,7 +21,11 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-primary/30 shadow-sm">
+    <motion.nav 
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-primary/30 shadow-sm"
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
@@ -37,7 +41,9 @@ const Navbar = () => {
                <span className="font-heading text-2xl font-bold text-secondary leading-none tracking-tight">
                  The Waffle <span className="text-accent">Pastry</span>
                </span>
-               <span className="text-[9px] uppercase tracking-[0.4em] text-secondary/40 font-black mt-2 ml-1">Est. 2026 • Cake 'N' Pastry</span>
+               <span className="text-[10px] font-body font-bold uppercase tracking-[0.3em] text-accent/70 mt-2 ml-1 italic">
+                  Est. 2026 • Cake 'N' Pastry
+               </span>
             </div>
           </Link>
 
@@ -132,7 +138,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   )
 }
 
