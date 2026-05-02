@@ -84,6 +84,12 @@ const getOrders = async (req, res) => {
 // @route   PUT /api/orders/:id/deliver
 // @access  Private/Admin
 const updateOrderToDelivered = async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.orderStatus = 'Delivered';
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
   } else {
     res.status(404).json({ message: 'Order not found' });
   }
