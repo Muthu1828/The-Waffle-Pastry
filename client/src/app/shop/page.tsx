@@ -99,7 +99,7 @@ const ShopPage = () => {
                       whileInView={{ opacity: 1, y: 0 }}
                       transition={{ delay: (index % 3) * 0.1 }}
                       viewport={{ once: true }}
-                      className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border border-primary/10"
+                      className="bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border-2 border-primary/5 hover:border-accent"
                     >
                        <div className="relative h-64 bg-primary/5 overflow-hidden">
                           {product.image ? (

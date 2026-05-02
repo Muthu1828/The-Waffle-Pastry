@@ -41,8 +41,8 @@ const Navbar = () => {
                <span className="font-heading text-2xl font-bold text-secondary leading-none tracking-tight">
                  The Waffle <span className="text-accent">Pastry</span>
                </span>
-               <span className="text-[10px] font-body font-bold uppercase tracking-[0.3em] text-accent/70 mt-2 ml-1 italic">
-                  Est. 2026 • Cake 'N' Pastry
+               <span className="text-[10px] font-body font-bold uppercase tracking-[0.3em] text-secondary/60 mt-2 ml-1 italic">
+                  Cake 'N' Pastry
                </span>
             </div>
           </Link>

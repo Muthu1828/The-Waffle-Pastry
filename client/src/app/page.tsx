@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ChevronRight, Star, Clock, ShieldCheck, ShoppingBag, Loader2 } from 'lucide-react'
 import API from '../lib/api'
 import { useCart } from '../context/CartContext'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, useAnimationControls } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 
 const HomePage = () => {
@@ -14,6 +14,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
   const router = useRouter()
+  const controls = useAnimationControls()
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -61,7 +62,7 @@ const HomePage = () => {
             <button 
               key={cat.name} 
               onClick={() => router.push(`/shop?category=${cat.name}`)}
-              className="group relative h-48 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500"
+              className="group relative h-48 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-accent"
             >
               <div className={`absolute inset-0 ${cat.color} opacity-40 group-hover:scale-110 transition-transform duration-500`} />
               <div className="relative h-full p-8 flex flex-col justify-center items-center text-center space-y-4">
@@ -84,7 +85,7 @@ const HomePage = () => {
             >
               Today’s Specials
             </motion.h2>
-            <p className="text-secondary/50 max-w-xl mx-auto font-medium">Fresh from the oven, automatically arriving for you.</p>
+            <p className="text-secondary/50 max-w-xl mx-auto font-medium italic">Hover to pause and select your favorite treat!</p>
           </div>
         </div>
 
@@ -97,31 +98,33 @@ const HomePage = () => {
             {/* The Infinite Scrolling Slider */}
             <motion.div 
               className="flex gap-8 px-4"
-              animate={{ x: ["0%", "-100%"] }}
+              initial={{ x: 0 }}
+              animate={{ x: "-100%" }}
               transition={{ 
-                duration: 25, 
+                duration: 30, 
                 repeat: Infinity, 
                 ease: "linear" 
               }}
+              whileHover={{ animationPlayState: "paused" }}
               style={{ width: "fit-content" }}
             >
               {/* Duplicate products for infinite loop */}
-              {[...products, ...products].map((product, index) => (
-                <div key={`${product._id}-${index}`} className="w-[300px] flex-shrink-0 bg-white rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 group border border-primary/10">
+              {[...products, ...products, ...products].map((product, index) => (
+                <div key={`${product._id}-${index}`} className="w-[320px] flex-shrink-0 bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 group border-2 border-[#4A2C2A]/10 hover:border-[#E07A5F] m-2">
                    <div className="relative h-64 bg-background overflow-hidden">
                       {product.image ? (
                         <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-secondary/10">No Image</div>
                       )}
-                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded-full flex items-center gap-1 text-[10px] font-black text-secondary shadow-sm">
+                      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-2 py-1 rounded-lg flex items-center gap-1 text-[10px] font-black text-secondary shadow-sm">
                          <Star size={12} className="fill-yellow-400 text-yellow-400" /> 4.9
                       </div>
                    </div>
-                   <div className="p-6 space-y-4">
+                   <div className="p-8 space-y-4">
                       <div>
-                        <h3 className="font-bold text-secondary group-hover:text-accent transition-colors truncate">{product.name}</h3>
-                        <p className="text-accent font-bold text-lg mt-1">Rs. {product.price}</p>
+                        <h3 className="font-bold text-secondary text-lg group-hover:text-accent transition-colors truncate">{product.name}</h3>
+                        <p className="text-accent font-black text-xl mt-1">Rs. {product.price}</p>
                       </div>
                       <button 
                         onClick={() => addToCart(product)}
@@ -137,7 +140,7 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* Features Section with staggered entry */}
+      {/* Features Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
           {[
