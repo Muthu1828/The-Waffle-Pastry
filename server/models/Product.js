@@ -19,28 +19,18 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Please add a category'],
     enum: ['Cakes', 'Waffles', 'Pastries', 'Specials']
   },
-  stock: {
+  countInStock: {
     type: Number,
     required: [true, 'Please add stock level'],
-    default: 0
+    default: 10
   },
-  images: [
-    {
-      url: String,
-      public_id: String
-    }
-  ],
+  image: {
+    type: String,
+    required: [true, 'Please add an image URL']
+  },
   isFeatured: {
     type: Boolean,
     default: false
-  },
-  ratings: {
-    type: Number,
-    default: 0
-  },
-  numOfReviews: {
-    type: Number,
-    default: 0
   }
 }, { timestamps: true });
 

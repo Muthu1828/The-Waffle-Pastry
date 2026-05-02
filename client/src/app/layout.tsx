@@ -1,5 +1,5 @@
 import '../styles/globals.css'
-import { Playfair_Display, Poppins } from 'next/font/google'
+import { Playfair_Display, Poppins, Lobster } from 'next/font/google'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Toaster } from 'react-hot-toast'
@@ -17,6 +17,12 @@ const poppins = Poppins({
   variable: '--font-poppins'
 })
 
+const lobster = Lobster({ 
+  weight: ['400'],
+  subsets: ['latin'],
+  variable: '--font-lobster'
+})
+
 export const metadata = {
   title: 'The Waffle Pastry – Cake N Pastry',
   description: 'Premium gourmet waffles, elegant cakes, and delicious pastries.',
@@ -28,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${poppins.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${poppins.variable} ${lobster.variable}`}>
       <body className="font-body">
         <AuthProvider>
           <CartProvider>

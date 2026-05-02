@@ -14,6 +14,7 @@ module.exports = {
       fontFamily: {
         heading: ['var(--font-playfair)', 'serif'],
         body: ['var(--font-poppins)', 'sans-serif'],
+        lobster: ['var(--font-lobster)', 'cursive'],
       },
     },
   },

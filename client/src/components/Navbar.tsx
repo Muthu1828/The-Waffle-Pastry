@@ -25,19 +25,19 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-14 h-14 bg-white p-1 rounded-xl transition-transform group-hover:scale-110 duration-300 flex items-center justify-center shadow-lg">
+          <Link href="/" className="flex items-center gap-4 group">
+            <div className="w-16 h-16 bg-white rounded-full p-0.5 overflow-hidden transition-all group-hover:scale-110 duration-500 shadow-[0_0_20px_rgba(224,122,95,0.3)] border-2 border-[#E07A5F]/50">
                <img 
                   src="/logo.png" 
                   alt="The Waffle Pastry" 
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover rounded-full"
                />
             </div>
             <div className="flex flex-col">
-               <span className="font-heading text-xl font-bold text-[#FFF8F0] leading-none tracking-tight">
+               <span className="font-lobster text-3xl text-[#FFF8F0] leading-none drop-shadow-md">
                  The Waffle <span className="text-[#E07A5F]">Pastry</span>
                </span>
-               <span className="text-[10px] uppercase tracking-[0.3em] text-[#FFF8F0]/60 font-bold mt-1">Cake 'N' Pastry</span>
+               <span className="text-[9px] uppercase tracking-[0.4em] text-[#FFF8F0]/50 font-black mt-2 ml-1">Est. 2026 • Cake 'N' Pastry</span>
             </div>
           </Link>
 
