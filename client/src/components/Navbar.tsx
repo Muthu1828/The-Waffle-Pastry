@@ -21,7 +21,7 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#4A2C2A] border-b border-white/10 shadow-xl">
+    <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-primary/30 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
@@ -34,22 +34,22 @@ const Navbar = () => {
                />
             </div>
             <div className="flex flex-col">
-               <span className="font-heading text-2xl font-bold text-[#FFF8F0] leading-none tracking-tight">
-                 The Waffle <span className="text-[#E07A5F]">Pastry</span>
+               <span className="font-heading text-2xl font-bold text-secondary leading-none tracking-tight">
+                 The Waffle <span className="text-accent">Pastry</span>
                </span>
-               <span className="text-[9px] uppercase tracking-[0.4em] text-[#FFF8F0]/50 font-black mt-2 ml-1">Est. 2026 • Cake 'N' Pastry</span>
+               <span className="text-[9px] uppercase tracking-[0.4em] text-secondary/40 font-black mt-2 ml-1">Est. 2026 • Cake 'N' Pastry</span>
             </div>
           </Link>
 
           {/* Desktop Links */}
             <div className="hidden md:flex items-center space-x-10">
               {navLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="text-[#FFF8F0]/80 font-bold hover:text-[#E07A5F] transition-all text-sm uppercase tracking-widest">
+                <Link key={link.name} href={link.href} className="text-secondary/60 font-bold hover:text-accent transition-all text-sm uppercase tracking-widest">
                   {link.name}
                 </Link>
               ))}
               {isAdmin && (
-                <Link href="/admin/products" className="bg-[#E07A5F] text-white font-bold px-5 py-2 rounded-full hover:bg-white hover:text-[#4A2C2A] transition-all text-xs uppercase tracking-widest shadow-lg shadow-black/20">
+                <Link href="/admin/products" className="text-accent font-bold px-5 py-2 border-2 border-accent rounded-full hover:bg-accent hover:text-white transition-all text-xs uppercase tracking-widest">
                   Manage Shop
                 </Link>
               )}
@@ -57,30 +57,30 @@ const Navbar = () => {
 
           {/* Icons */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/cart" className="relative text-[#FFF8F0] hover:text-[#E07A5F] transition-colors p-2">
+            <Link href="/cart" className="relative text-secondary hover:text-accent transition-colors p-2">
               <ShoppingCart size={22} />
-              <span className="absolute -top-1 -right-1 bg-[#E07A5F] text-white text-[9px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md">
+              <span className="absolute -top-1 -right-1 bg-accent text-white text-[9px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md">
                 {cartCount}
               </span>
             </Link>
             
             {user ? (
-               <div className="flex items-center gap-5 border-l border-white/20 pl-6">
+               <div className="flex items-center gap-5 border-l border-primary/20 pl-6">
                   <div className="flex flex-col items-end">
-                     <span className="text-xs font-black text-[#FFF8F0] leading-none uppercase tracking-tighter">{user.name}</span>
-                     <span className="text-[9px] text-[#E07A5F] font-bold uppercase tracking-widest mt-1">
+                     <span className="text-xs font-black text-secondary leading-none uppercase tracking-tighter">{user.name}</span>
+                     <span className="text-[9px] text-accent font-bold uppercase tracking-widest mt-1">
                         {user.role}
                      </span>
                   </div>
                   <button 
                      onClick={() => { logout(); window.location.href = '/' }}
-                     className="px-4 py-2 bg-white/10 hover:bg-red-500/20 text-[#FFF8F0] border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all"
+                     className="px-4 py-2 bg-secondary/5 hover:bg-red-500/10 text-secondary border border-primary/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all"
                   >
                      Sign Out
                   </button>
                </div>
             ) : (
-               <Link href="/login" className="bg-white/10 text-[#FFF8F0] px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-[#4A2C2A] transition-all border border-white/10">
+               <Link href="/login" className="bg-secondary text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-accent transition-all">
                   Login
                </Link>
             )}
