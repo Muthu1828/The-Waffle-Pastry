@@ -19,27 +19,27 @@ const Hero = () => {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="space-y-8 flex flex-col items-center text-center"
+          className="space-y-8 flex flex-col items-start text-left"
         >
           <div className="space-y-4 w-full">
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase mx-auto"
+              className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase"
             >
               Homemade with Love
             </motion.span>
-            <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight text-center">
+            <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight text-center md:w-fit">
               Delicious <br />
               <span className="text-accent italic">In Every Bite</span>
             </h1>
-            <p className="text-secondary/70 text-lg md:text-xl max-w-lg leading-relaxed mx-auto">
+            <p className="text-secondary/70 text-lg md:text-xl max-w-lg leading-relaxed">
               Experience the perfect crunch of our gourmet waffles and the silky sweetness of our premium cakes. Freshly baked, every single day.
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap gap-4">
             <Link href="/shop" className="btn-primary flex items-center gap-2 group">
               Order Now
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -49,7 +49,7 @@ const Hero = () => {
             </Link>
           </div>
 
-          <div className="flex items-center justify-center gap-8 pt-4">
+          <div className="flex items-center gap-8 pt-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-secondary">50+</p>
               <p className="text-xs text-secondary/50 uppercase tracking-wider">Flavors</p>
