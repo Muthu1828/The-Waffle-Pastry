@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ChevronRight, Star, Clock, ShieldCheck, ShoppingBag, Loader2 } from 'lucide-react'
 import API from '../lib/api'
 import { useCart } from '../context/CartContext'
-import { motion, useAnimationControls } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 
 const HomePage = () => {
@@ -14,7 +14,7 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
   const router = useRouter()
-  const controls = useAnimationControls()
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -94,23 +94,25 @@ const HomePage = () => {
               <Loader2 className="animate-spin text-accent" size={48} />
            </div>
         ) : (
-          <div className="relative">
+          <div className="relative" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
             {/* The Infinite Scrolling Slider */}
             <motion.div 
               className="flex gap-8 px-4"
               initial={{ x: 0 }}
-              animate={{ x: "-100%" }}
+              animate={isPaused ? {} : { x: "-100%" }}
               transition={{ 
                 duration: 30, 
                 repeat: Infinity, 
                 ease: "linear" 
               }}
-              whileHover={{ animationPlayState: "paused" }}
               style={{ width: "fit-content" }}
             >
               {/* Duplicate products for infinite loop */}
               {[...products, ...products, ...products].map((product, index) => (
-                <div key={`${product._id}-${index}`} className="w-[320px] flex-shrink-0 bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 group border-2 border-[#4A2C2A]/10 hover:border-[#E07A5F] m-2">
+                <div 
+                   key={`${product._id}-${index}`} 
+                   className="w-[320px] flex-shrink-0 bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-[0_20px_50px_rgba(224,122,95,0.4)] transition-all duration-500 group border-2 border-[#4A2C2A]/10 hover:border-[#E07A5F] m-2 hover:-translate-y-4 cursor-pointer"
+                >
                    <div className="relative h-64 bg-background overflow-hidden">
                       {product.image ? (
                         <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
