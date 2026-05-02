@@ -11,7 +11,7 @@ import {
   Loader2,
   ChevronRight
 } from 'lucide-react'
-import API from '../../lib/api'
+import API from '../../../lib/api'
 import { toast } from 'react-hot-toast'
 import Link from 'next/link'
 

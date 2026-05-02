@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { Plus, Trash2, Loader2, ListChecks, Hash } from 'lucide-react'
-import API from '../../lib/api'
+import API from '../../../lib/api'
 import { toast } from 'react-hot-toast'
 
 const CategoryPage = () => {
