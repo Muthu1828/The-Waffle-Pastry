@@ -1,96 +1,143 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import { Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'lucide-react'
+import { Trash2, Plus, Minus, ShoppingBag, ArrowRight, Truck } from 'lucide-react'
+import { useCart } from '../../context/CartContext'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const CartPage = () => {
-  const cartItems = [
-    { id: 1, name: 'Berry Bliss Waffle', price: 320, qty: 1, image: '/p1.jpg' },
-    { id: 2, name: 'Dark Chocolate Cake', price: 850, qty: 1, image: '/p2.jpg' },
-  ]
+  const { cartItems, removeFromCart, decrementQty, addToCart, clearCart, subtotal } = useCart()
+  const [location, setLocation] = useState('Local') // Default location
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-  const deliveryFee = 50
+  // Delivery fee based on location
+  const deliveryFees: { [key: string]: number } = {
+    'Local': 50,
+    'City': 100,
+    'Outskirts': 250
+  }
+
+  const deliveryFee = cartItems.length > 0 ? deliveryFees[location] : 0
   const total = subtotal + deliveryFee
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h1 className="font-heading text-4xl font-bold text-secondary mb-12">Your Cart</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 min-h-[80vh]">
+      <div className="flex items-center gap-4 mb-12">
+        <div className="w-12 h-12 bg-[#4A2C2A] text-white rounded-2xl flex items-center justify-center shadow-lg">
+           <ShoppingBag size={24} />
+        </div>
+        <h1 className="font-heading text-4xl font-bold text-secondary">Your Sweet Cart</h1>
+      </div>
 
-      {cartItems.length > 0 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          {/* Items List */}
-          <div className="lg:col-span-2 space-y-6">
-            {cartItems.map((item) => (
-              <div key={item.id} className="bg-white p-6 rounded-3xl shadow-sm border border-primary/10 flex items-center gap-6">
-                <div className="w-24 h-24 bg-primary/5 rounded-2xl shrink-0 flex items-center justify-center text-secondary/10">
-                   IMG
-                </div>
-                
-                <div className="flex-1 space-y-2">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-bold text-secondary text-lg">{item.name}</h3>
-                    <button className="text-secondary/30 hover:text-red-500 transition-colors">
-                       <Trash2 size={20} />
-                    </button>
-                  </div>
-                  <p className="text-accent font-bold">Rs.{item.price}</p>
-                  
-                  <div className="flex items-center gap-4 pt-2">
-                     <div className="flex items-center border border-primary/20 rounded-lg">
-                        <button className="p-2 hover:bg-primary/5"><Minus size={14} /></button>
-                        <span className="px-4 font-bold text-sm">{item.qty}</span>
-                        <button className="p-2 hover:bg-primary/5"><Plus size={14} /></button>
-                     </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Summary */}
-          <div className="lg:col-span-1">
-            <div className="bg-secondary text-white p-8 rounded-[2rem] shadow-xl sticky top-28 space-y-8">
-               <h3 className="text-2xl font-bold">Order Summary</h3>
-               
-               <div className="space-y-4 text-primary/70">
-                  <div className="flex justify-between">
-                     <span>Subtotal</span>
-                     <span className="text-white font-bold">Rs.{subtotal}</span>
-                  </div>
-                  <div className="flex justify-between">
-                     <span>Delivery Fee</span>
-                     <span className="text-white font-bold">Rs.{deliveryFee}</span>
-                  </div>
-                  <div className="border-t border-white/10 pt-4 flex justify-between text-xl text-white">
-                     <span className="font-bold">Total</span>
-                     <span className="font-bold text-accent">Rs.{total}</span>
-                  </div>
-               </div>
-
-               <Link href="/checkout" className="btn-primary w-full flex items-center justify-center gap-2 py-4">
-                  Proceed to Checkout <ArrowRight size={18} />
-               </Link>
-               
-               <p className="text-[10px] text-center text-primary/40 uppercase tracking-widest font-bold">
-                  Secure checkout powered by Razorpay
-               </p>
-            </div>
-          </div>
+      {cartItems.length === 0 ? (
+        <div className="text-center py-24 bg-white rounded-[3rem] shadow-sm border border-primary/10">
+           <div className="text-6xl mb-6">🛒</div>
+           <h2 className="text-2xl font-bold text-secondary mb-4">Your cart is empty!</h2>
+           <p className="text-secondary/50 mb-10 max-w-sm mx-auto">Looks like you haven't added any treats yet. Let's find something delicious!</p>
+           <Link href="/shop" className="btn-primary">Start Shopping</Link>
         </div>
       ) : (
-        <div className="text-center py-24 space-y-8">
-           <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-accent mx-auto">
-              <ShoppingBag size={48} />
-           </div>
-           <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-secondary">Your cart is empty</h2>
-              <p className="text-secondary/50">Looks like you haven't added any treats yet.</p>
-           </div>
-           <Link href="/shop" className="btn-primary inline-block">
-              Start Shopping
-           </Link>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Cart Items List */}
+          <div className="lg:col-span-2 space-y-6">
+            <AnimatePresence>
+               {cartItems.map((item: any) => (
+                 <motion.div 
+                   key={item._id}
+                   initial={{ opacity: 0, y: 20 }}
+                   animate={{ opacity: 1, y: 0 }}
+                   exit={{ opacity: 0, x: -100 }}
+                   className="flex flex-col sm:flex-row items-center gap-6 p-6 bg-white rounded-[2rem] border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
+                 >
+                    <div className="w-24 h-24 bg-background rounded-2xl overflow-hidden flex-shrink-0">
+                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                    </div>
+                    
+                    <div className="flex-1 text-center sm:text-left">
+                       <h3 className="font-bold text-lg text-secondary">{item.name}</h3>
+                       <p className="text-accent font-bold">Rs. {item.price}</p>
+                    </div>
+
+                    <div className="flex items-center gap-4 bg-background px-4 py-2 rounded-xl">
+                       <button 
+                         onClick={() => decrementQty(item._id)}
+                         className="p-1 hover:text-red-500 transition-colors"
+                        >
+                          <Minus size={16} />
+                       </button>
+                       <span className="font-bold text-secondary w-4 text-center">{item.qty}</span>
+                       <button 
+                         onClick={() => addToCart(item)}
+                         className="p-1 hover:text-accent transition-colors"
+                       >
+                          <Plus size={16} />
+                       </button>
+                    </div>
+
+                    <div className="text-right min-w-[100px]">
+                       <p className="font-bold text-secondary">Rs. {item.price * item.qty}</p>
+                    </div>
+
+                    <button 
+                      onClick={() => removeFromCart(item._id)}
+                      className="p-3 text-secondary/20 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                    >
+                       <Trash2 size={20} />
+                    </button>
+                 </motion.div>
+               ))}
+            </AnimatePresence>
+            
+            <button 
+              onClick={clearCart}
+              className="text-sm font-bold text-secondary/40 hover:text-red-500 uppercase tracking-widest ml-4 transition-colors"
+            >
+               Empty Cart
+            </button>
+          </div>
+
+          {/* Order Summary */}
+          <div className="space-y-6">
+             <div className="bg-white rounded-[2.5rem] p-8 border border-primary/10 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-full blur-3xl" />
+                <h2 className="text-xl font-bold text-secondary mb-8">Order Summary</h2>
+                
+                <div className="space-y-4 text-sm font-medium">
+                   <div className="flex justify-between text-secondary/60">
+                      <span>Subtotal</span>
+                      <span className="text-secondary">Rs. {subtotal}</span>
+                   </div>
+                   
+                   <div className="space-y-3">
+                      <div className="flex justify-between text-secondary/60 items-center">
+                         <span className="flex items-center gap-2"><Truck size={14} /> Delivery Location</span>
+                         <select 
+                           value={location}
+                           onChange={(e) => setLocation(e.target.value)}
+                           className="bg-background border-none text-secondary font-bold text-xs p-1 rounded-lg outline-none cursor-pointer"
+                         >
+                            <option value="Local">Local (Rs. 50)</option>
+                            <option value="City">City (Rs. 100)</option>
+                            <option value="Outskirts">Outskirts (Rs. 250)</option>
+                         </select>
+                      </div>
+                   </div>
+
+                   <div className="border-t border-primary/10 pt-4 flex justify-between text-lg font-bold text-secondary">
+                      <span>Total</span>
+                      <span className="text-accent text-2xl">Rs. {total}</span>
+                   </div>
+                </div>
+
+                <button className="w-full btn-primary py-5 mt-10 flex items-center justify-center gap-2 group shadow-xl shadow-accent/20">
+                   Checkout Now <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+             </div>
+             
+             <p className="text-[10px] text-secondary/30 text-center font-bold uppercase tracking-widest px-4">
+                Prices include all taxes. Secure payments powered by Razorpay.
+             </p>
+          </div>
         </div>
       )}
     </div>

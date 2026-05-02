@@ -30,13 +30,23 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setCartItems(prev => prev.filter(item => item._id !== id))
   }
 
+  const decrementQty = (id: string) => {
+    setCartItems(prev => {
+      const item = prev.find(i => i._id === id)
+      if (item && item.qty > 1) {
+        return prev.map(i => i._id === id ? { ...i, qty: i.qty - 1 } : i)
+      }
+      return prev.filter(i => i._id !== id)
+    })
+  }
+
   const clearCart = () => setCartItems([])
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
   const cartCount = cartItems.reduce((acc, item) => acc + item.qty, 0)
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, clearCart, subtotal, cartCount }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, decrementQty, clearCart, subtotal, cartCount }}>
       {children}
     </CartContext.Provider>
   )

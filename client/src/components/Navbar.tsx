@@ -26,15 +26,15 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-4 group">
-            <div className="w-16 h-16 bg-white rounded-full p-0.5 overflow-hidden transition-all group-hover:scale-110 duration-500 shadow-[0_0_20px_rgba(224,122,95,0.3)] border-2 border-[#E07A5F]/50">
+            <div className="w-16 h-16 transition-transform group-hover:scale-110 duration-500">
                <img 
                   src="/logo.png" 
                   alt="The Waffle Pastry" 
-                  className="w-full h-full object-cover rounded-full"
+                  className="w-full h-full object-contain"
                />
             </div>
             <div className="flex flex-col">
-               <span className="font-lobster text-3xl text-[#FFF8F0] leading-none drop-shadow-md">
+               <span className="font-heading text-2xl font-bold text-[#FFF8F0] leading-none tracking-tight">
                  The Waffle <span className="text-[#E07A5F]">Pastry</span>
                </span>
                <span className="text-[9px] uppercase tracking-[0.4em] text-[#FFF8F0]/50 font-black mt-2 ml-1">Est. 2026 • Cake 'N' Pastry</span>
