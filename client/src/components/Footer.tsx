@@ -11,15 +11,15 @@ const Footer = () => {
           {/* Brand Info */}
           <div className="space-y-6">
             <div className="flex items-center gap-2">
-               <div className="w-12 h-12 flex items-center justify-center">
-                  <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
-               </div>
-               <span className="font-heading text-xl font-bold text-white leading-none">
-                  The Waffle <span className="text-accent">Pastry</span>
-               </span>
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src="/logo.png" alt="Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="font-heading text-xl font-bold text-white leading-none">
+                The Waffle <span className="text-accent">Pastry</span>
+              </span>
             </div>
             <p className="text-primary/70 text-sm leading-relaxed">
-              Serving handcrafted gourmet waffles, elegant cakes, and artisanal pastries since 2024. Every bite is a piece of heaven.
+              Serving handcrafted gourmet waffles, elegant cakes, and artisanal pastries since 2026. Every bite is a piece of heaven.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-accent transition-colors"><Instagram size={20} /></a>
@@ -69,9 +69,9 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-primary/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-primary/40">
-          <p>© 2024 The Waffle Pastry. All rights reserved.</p>
+          <p>© 2026 The Waffle Pastry. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link>

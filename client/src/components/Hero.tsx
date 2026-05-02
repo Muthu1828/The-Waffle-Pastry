@@ -19,22 +19,22 @@ const Hero = () => {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="space-y-8"
+          className="space-y-8 flex flex-col items-center text-center md:items-start md:text-left"
         >
-          <div className="space-y-4">
-            <motion.span 
+          <div className="space-y-4 w-full">
+            <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase"
+              className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase mx-auto md:mx-0"
             >
               Homemade with Love
             </motion.span>
-            <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight">
-              Deliciousness <br />
+            <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight text-center md:text-left">
+              Delicious <br />
               <span className="text-accent italic">In Every Bite</span>
             </h1>
-            <p className="text-secondary/70 text-lg md:text-xl max-w-lg leading-relaxed">
+            <p className="text-secondary/70 text-lg md:text-xl max-w-lg leading-relaxed mx-auto md:mx-0">
               Experience the perfect crunch of our gourmet waffles and the silky sweetness of our premium cakes. Freshly baked, every single day.
             </p>
           </div>
@@ -48,7 +48,7 @@ const Hero = () => {
               Our Story
             </Link>
           </div>
-          
+
           <div className="flex items-center gap-8 pt-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-secondary">50+</p>
@@ -75,21 +75,21 @@ const Hero = () => {
           className="relative"
         >
           {/* Floating elements */}
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -20, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="relative z-10 w-full aspect-square rounded-[30% 70% 70% 30% / 30% 30% 70% 70%] overflow-hidden shadow-2xl border-8 border-white"
           >
             <div className="w-full h-full bg-primary relative">
-               <div className="absolute inset-0 flex items-center justify-center text-secondary/20 font-heading text-4xl">
-                  {/* Hero image placeholder or actual image if provided */}
-                  [ Bakery Hero Image ]
-               </div>
+              <div className="absolute inset-0 flex items-center justify-center text-secondary/20 font-heading text-4xl">
+                {/* Hero image placeholder or actual image if provided */}
+                [ Bakery Hero Image ]
+              </div>
             </div>
           </motion.div>
-          
+
           {/* Decorative badges */}
-          <motion.div 
+          <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             className="absolute -top-6 -right-6 w-24 h-24 bg-white rounded-full shadow-xl flex items-center justify-center p-2 z-20 border-2 border-primary/20"
@@ -98,17 +98,17 @@ const Hero = () => {
               Best <br /> Seller
             </div>
           </motion.div>
-          
-          <motion.div 
+
+          <motion.div
             whileHover={{ scale: 1.1 }}
             className="absolute -bottom-6 left-12 bg-white px-6 py-4 rounded-2xl shadow-xl z-20 flex items-center gap-3 border border-primary/20"
           >
             <div className="w-10 h-10 bg-accent/20 rounded-full flex items-center justify-center text-accent">
-               🍰
+              🍰
             </div>
             <div>
-               <p className="text-xs text-secondary/50 font-bold uppercase tracking-widest">New Arrival</p>
-               <p className="text-sm font-bold text-secondary">Berry Bliss Waffle</p>
+              <p className="text-xs text-secondary/50 font-bold uppercase tracking-widest">New Arrival</p>
+              <p className="text-sm font-bold text-secondary">Berry Bliss Waffle</p>
             </div>
           </motion.div>
         </motion.div>
