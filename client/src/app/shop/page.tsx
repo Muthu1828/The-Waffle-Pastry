@@ -14,21 +14,25 @@ const ShopPage = () => {
   const categoryParam = searchParams.get('category')
   
   const [products, setProducts] = useState<any[]>([])
+  const [categories, setCategories] = useState<string[]>(['All'])
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(categoryParam || 'All')
-  const categories = ['All', 'Cakes', 'Waffles', 'Pastries']
   
   const { addToCart } = useCart()
 
   useEffect(() => {
-    if (categoryParam) {
-      setActiveCategory(categoryParam)
-    }
-  }, [categoryParam])
-
-  useEffect(() => {
+    fetchCategories()
     fetchProducts()
   }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await API.get('/categories')
+      setCategories(['All', ...data.map((c: any) => c.name)])
+    } catch (err) {
+      console.error('Failed to load categories')
+    }
+  }
 
   const fetchProducts = async () => {
     try {

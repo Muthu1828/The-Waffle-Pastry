@@ -15,6 +15,7 @@ const HomePage = () => {
   const { addToCart } = useCart()
   const router = useRouter()
   const [isPaused, setIsPaused] = useState(false)
+  const [categories, setCategories] = useState<any[]>([])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,13 +29,26 @@ const HomePage = () => {
       }
     }
     fetchProducts()
+    fetchCategories()
   }, [])
 
-  const categories = [
-    { name: 'Cakes', icon: '🎂', color: 'bg-pink-100' },
-    { name: 'Waffles', icon: '🧇', color: 'bg-orange-100' },
-    { name: 'Pastries', icon: '🥐', color: 'bg-yellow-100' },
-  ]
+  const fetchCategories = async () => {
+    try {
+      const { data } = await API.get('/categories')
+      // Map basic colors for the first few categories
+      const colors = ['bg-pink-100', 'bg-orange-100', 'bg-yellow-100', 'bg-blue-100', 'bg-green-100']
+      const icons = ['🎂', '🧇', '🥐', '🍟', '🥤', '🍰']
+      const formatted = data.map((c: any, i: number) => ({
+        name: c.name,
+        icon: icons[i % icons.length],
+        color: colors[i % colors.length]
+      }))
+      setCategories(formatted)
+    } catch (err) {
+      console.error('Failed to load categories')
+    }
+  }
+
 
   return (
     <div className="space-y-24 pb-24 bg-[#FFF8F0]/30 overflow-x-hidden">

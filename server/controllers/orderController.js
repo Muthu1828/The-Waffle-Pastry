@@ -84,14 +84,28 @@ const getOrders = async (req, res) => {
 // @route   PUT /api/orders/:id/deliver
 // @access  Private/Admin
 const updateOrderToDelivered = async (req, res) => {
-  const order = await Order.findById(req.params.id);
-
-  if (order) {
-    order.orderStatus = 'Delivered';
-    const updatedOrder = await order.save();
-    res.json(updatedOrder);
   } else {
     res.status(404).json({ message: 'Order not found' });
+  }
+};
+
+// @desc    Get order stats for dashboard
+// @route   GET /api/orders/stats
+// @access  Private/Admin
+const getOrderStats = async (req, res) => {
+  try {
+    const orders = await Order.find({});
+    const stats = {
+      total: orders.length,
+      pending: orders.filter(o => o.orderStatus === 'Processing').length,
+      shipped: orders.filter(o => o.orderStatus === 'Shipped').length,
+      delivered: orders.filter(o => o.orderStatus === 'Delivered').length,
+      cancelled: orders.filter(o => o.orderStatus === 'Cancelled').length,
+      totalRevenue: orders.filter(o => o.isPaid).reduce((acc, item) => acc + item.totalPrice, 0)
+    };
+    res.json(stats);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -101,5 +115,6 @@ module.exports = {
   updateOrderToPaid,
   getMyOrders,
   getOrders,
-  updateOrderToDelivered
+  updateOrderToDelivered,
+  getOrderStats
 };

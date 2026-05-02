@@ -24,8 +24,31 @@ const lobster = Lobster({
 })
 
 export const metadata = {
-  title: 'The Waffle Pastry – Cake N Pastry',
-  description: 'Premium gourmet waffles, elegant cakes, and delicious pastries.',
+  title: {
+    default: 'The Waffle Pastry | Gourmet Waffles & Premium Cakes',
+    template: '%s | The Waffle Pastry'
+  },
+  description: 'Experience the best gourmet waffles, artisanal cakes, and delicious pastries in town. Handcrafted with love, every single day.',
+  keywords: ['bakery', 'waffles', 'cakes', 'pastries', 'online cake delivery', 'best waffles near me', 'the waffle pastry'],
+  authors: [{ name: 'The Waffle Pastry' }],
+  creator: 'The Waffle Pastry',
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: 'https://thewafflepastry.com',
+    title: 'The Waffle Pastry | Gourmet Waffles & Premium Cakes',
+    description: 'Experience the best gourmet waffles, artisanal cakes, and delicious pastries in town.',
+    siteName: 'The Waffle Pastry',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Waffle Pastry',
+    description: 'Best waffles and cakes in town.',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({

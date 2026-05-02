@@ -11,11 +11,12 @@ const AdminProducts = () => {
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [categories, setCategories] = useState<any[]>([])
   
   const [formData, setFormData] = useState({
     name: '',
     price: '',
-    category: 'Waffles',
+    category: '',
     description: '',
     countInStock: 10,
     image: ''
@@ -23,7 +24,20 @@ const AdminProducts = () => {
 
   useEffect(() => {
     fetchProducts()
+    fetchCategories()
   }, [])
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await API.get('/categories')
+      setCategories(data)
+      if (data.length > 0 && !formData.category) {
+        setFormData(prev => ({ ...prev, category: data[0].name }))
+      }
+    } catch (err) {
+      toast.error('Failed to load categories')
+    }
+  }
 
   const fetchProducts = async () => {
     try {
@@ -69,7 +83,7 @@ const AdminProducts = () => {
       toast.success('Product added successfully')
       setShowModal(false)
       fetchProducts()
-      setFormData({ name: '', price: '', category: 'Waffles', description: '', countInStock: 10, image: '' })
+      setFormData({ name: '', price: '', category: categories[0]?.name || '', description: '', countInStock: 10, image: '' })
     } catch (err) {
       toast.error('Failed to add product')
     }
@@ -232,9 +246,9 @@ const AdminProducts = () => {
                           onChange={(e) => setFormData({...formData, category: e.target.value})}
                           className="w-full bg-background/50 border border-primary/10 rounded-2xl p-4 outline-none focus:border-accent"
                       >
-                          <option>Waffles</option>
-                          <option>Cakes</option>
-                          <option>Pastries</option>
+                          {categories.map(cat => (
+                            <option key={cat._id} value={cat.name}>{cat.name}</option>
+                          ))}
                       </select>
                     </div>
                     <div className="md:col-span-2 space-y-2">
