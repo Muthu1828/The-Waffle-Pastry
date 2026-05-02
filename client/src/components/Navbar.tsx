@@ -6,10 +6,12 @@ import Image from 'next/image'
 import { ShoppingCart, User, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { user, logout, isAdmin } = useAuth()
+  const { cartCount } = useCart()
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -19,12 +21,12 @@ const Navbar = () => {
   ]
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-primary/30">
+    <nav className="sticky top-0 z-50 bg-[#4A2C2A] border-b border-white/10 shadow-xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-24">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-16 h-16 transition-transform group-hover:scale-110 duration-300 flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-14 h-14 bg-white p-1 rounded-xl transition-transform group-hover:scale-110 duration-300 flex items-center justify-center shadow-lg">
                <img 
                   src="/logo.png" 
                   alt="The Waffle Pastry" 
@@ -32,54 +34,54 @@ const Navbar = () => {
                />
             </div>
             <div className="flex flex-col">
-               <span className="font-heading text-xl font-bold text-secondary leading-none">
-                 The Waffle <span className="text-accent">Pastry</span>
+               <span className="font-heading text-xl font-bold text-[#FFF8F0] leading-none tracking-tight">
+                 The Waffle <span className="text-[#E07A5F]">Pastry</span>
                </span>
-               <span className="text-[10px] uppercase tracking-[0.2em] text-secondary/40 font-bold">Cake 'N' Pastry</span>
+               <span className="text-[10px] uppercase tracking-[0.3em] text-[#FFF8F0]/60 font-bold mt-1">Cake 'N' Pastry</span>
             </div>
           </Link>
 
           {/* Desktop Links */}
             <div className="hidden md:flex items-center space-x-10">
               {navLinks.map((link) => (
-                <Link key={link.name} href={link.href} className="text-secondary/60 font-bold hover:text-accent transition-colors">
+                <Link key={link.name} href={link.href} className="text-[#FFF8F0]/80 font-bold hover:text-[#E07A5F] transition-all text-sm uppercase tracking-widest">
                   {link.name}
                 </Link>
               ))}
               {isAdmin && (
-                <Link href="/admin/products" className="text-accent font-bold px-4 py-2 border-2 border-accent rounded-full hover:bg-accent hover:text-white transition-all text-sm">
-                  Admin Panel
+                <Link href="/admin/products" className="bg-[#E07A5F] text-white font-bold px-5 py-2 rounded-full hover:bg-white hover:text-[#4A2C2A] transition-all text-xs uppercase tracking-widest shadow-lg shadow-black/20">
+                  Manage Shop
                 </Link>
               )}
             </div>
 
           {/* Icons */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link href="/cart" className="relative text-secondary hover:text-accent transition-colors">
-              <ShoppingCart size={24} />
-              <span className="absolute -top-2 -right-2 bg-accent text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
-                0
+            <Link href="/cart" className="relative text-[#FFF8F0] hover:text-[#E07A5F] transition-colors p-2">
+              <ShoppingCart size={22} />
+              <span className="absolute -top-1 -right-1 bg-[#E07A5F] text-white text-[9px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-md">
+                {cartCount}
               </span>
             </Link>
             
             {user ? (
-               <div className="flex items-center gap-4 border-l border-primary/30 pl-6">
+               <div className="flex items-center gap-5 border-l border-white/20 pl-6">
                   <div className="flex flex-col items-end">
-                     <span className="text-xs font-bold text-secondary leading-none">{user.name}</span>
-                     <span className="text-[10px] text-accent font-bold uppercase tracking-tighter mt-1">
+                     <span className="text-xs font-black text-[#FFF8F0] leading-none uppercase tracking-tighter">{user.name}</span>
+                     <span className="text-[9px] text-[#E07A5F] font-bold uppercase tracking-widest mt-1">
                         {user.role}
                      </span>
                   </div>
                   <button 
                      onClick={() => { logout(); window.location.href = '/' }}
-                     className="p-2 text-secondary/40 hover:text-red-500 transition-colors"
+                     className="px-4 py-2 bg-white/10 hover:bg-red-500/20 text-[#FFF8F0] border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all"
                   >
-                     <User size={20} className="fill-current opacity-20" />
+                     Sign Out
                   </button>
                </div>
             ) : (
-               <Link href="/login" className="text-secondary hover:text-accent transition-colors">
-                  <User size={24} />
+               <Link href="/login" className="bg-white/10 text-[#FFF8F0] px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-white hover:text-[#4A2C2A] transition-all border border-white/10">
+                  Login
                </Link>
             )}
           </div>
