@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Plus, Search, Edit2, Trash2, Package, Loader2 } from 'lucide-react'
+import { Plus, Search, Edit2, Trash2, Package, Loader2, Upload, X } from 'lucide-react'
 import API from '../../../lib/api'
 import { toast } from 'react-hot-toast'
 import AdminGuard from '../../../components/AdminGuard'
@@ -10,13 +10,15 @@ const AdminProducts = () => {
   const [showModal, setShowModal] = useState(false)
   const [products, setProducts] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [uploading, setUploading] = useState(false)
+  
   const [formData, setFormData] = useState({
     name: '',
     price: '',
     category: 'Waffles',
     description: '',
     countInStock: 10,
-    image: '/placeholder.jpg'
+    image: ''
   })
 
   useEffect(() => {
@@ -34,14 +36,40 @@ const AdminProducts = () => {
     }
   }
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const formDataUpload = new FormData()
+    formDataUpload.append('image', file)
+
+    setUploading(true)
+    try {
+      const { data } = await API.post('/upload', formDataUpload, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      setFormData({ ...formData, image: data.url })
+      toast.success('Image uploaded successfully!')
+    } catch (err) {
+      toast.error('Image upload failed')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!formData.image) {
+      toast.error('Please upload a product image first')
+      return
+    }
+
     try {
       await API.post('/products', formData)
       toast.success('Product added successfully')
       setShowModal(false)
       fetchProducts()
-      setFormData({ name: '', price: '', category: 'Waffles', description: '', countInStock: 10, image: '/placeholder.jpg' })
+      setFormData({ name: '', price: '', category: 'Waffles', description: '', countInStock: 10, image: '' })
     } catch (err) {
       toast.error('Failed to add product')
     }
@@ -106,8 +134,12 @@ const AdminProducts = () => {
                                 <tr key={product._id} className="hover:bg-primary/5 transition-colors">
                                   <td className="px-8 py-6">
                                       <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-accent">
-                                            <Package size={20} />
+                                        <div className="w-12 h-12 bg-primary/10 rounded-xl overflow-hidden flex items-center justify-center text-accent">
+                                            {product.image ? (
+                                              <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                                            ) : (
+                                              <Package size={20} />
+                                            )}
                                         </div>
                                         <span className="font-bold text-secondary">{product.name}</span>
                                       </div>
@@ -141,14 +173,44 @@ const AdminProducts = () => {
 
         {showModal && (
           <div className="fixed inset-0 bg-secondary/40 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-              <div className="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-10 relative overflow-hidden">
-                <h2 className="text-3xl font-bold text-secondary mb-8">Add New Product</h2>
+              <div className="bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl p-10 relative overflow-hidden max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-3xl font-bold text-secondary">Add New Product</h2>
+                  <button onClick={() => setShowModal(false)} className="p-2 hover:bg-background rounded-full transition-colors">
+                    <X size={24} className="text-secondary/40" />
+                  </button>
+                </div>
+
                 <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Image Upload Area */}
+                    <div className="md:col-span-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-secondary/50 block mb-2">Product Image</label>
+                      <div className="relative h-48 bg-background border-2 border-dashed border-primary/20 rounded-3xl flex flex-col items-center justify-center overflow-hidden group">
+                        {formData.image ? (
+                          <>
+                            <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-secondary/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                              <label className="cursor-pointer bg-white px-6 py-2 rounded-full font-bold text-secondary text-sm">Change Image</label>
+                            </div>
+                          </>
+                        ) : (
+                          <div className="flex flex-col items-center text-secondary/30">
+                            {uploading ? <Loader2 className="animate-spin mb-2" /> : <Upload className="mb-2" />}
+                            <span className="text-sm font-bold uppercase tracking-widest">Click to upload</span>
+                          </div>
+                        )}
+                        <input 
+                          type="file" 
+                          onChange={handleImageUpload}
+                          className="absolute inset-0 opacity-0 cursor-pointer"
+                        />
+                      </div>
+                    </div>
+
                     <div className="md:col-span-2 space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-secondary/50">Product Name</label>
                       <input 
-                          type="text" 
-                          required
+                          type="text" required
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
                           className="w-full bg-background/50 border border-primary/10 rounded-2xl p-4 outline-none focus:border-accent" 
@@ -157,8 +219,7 @@ const AdminProducts = () => {
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-secondary/50">Price (Rs.)</label>
                       <input 
-                          type="number" 
-                          required
+                          type="number" required
                           value={formData.price}
                           onChange={(e) => setFormData({...formData, price: e.target.value})}
                           className="w-full bg-background/50 border border-primary/10 rounded-2xl p-4 outline-none focus:border-accent" 
@@ -182,12 +243,12 @@ const AdminProducts = () => {
                           required
                           value={formData.description}
                           onChange={(e) => setFormData({...formData, description: e.target.value})}
-                          className="w-full bg-background/50 border border-primary/10 rounded-2xl p-4 outline-none focus:border-accent min-h-[120px]" 
+                          className="w-full bg-background/50 border border-primary/10 rounded-2xl p-4 outline-none focus:border-accent min-h-[100px]" 
                       />
                     </div>
                     <div className="md:col-span-2 flex gap-4 pt-4">
                       <button type="button" onClick={() => setShowModal(false)} className="flex-1 px-8 py-4 bg-background border border-primary/20 rounded-2xl font-bold text-secondary">Cancel</button>
-                      <button type="submit" className="flex-1 btn-primary py-4">Save Product</button>
+                      <button type="submit" disabled={uploading} className="flex-1 btn-primary py-4 disabled:opacity-50">Save Product</button>
                     </div>
                 </form>
               </div>

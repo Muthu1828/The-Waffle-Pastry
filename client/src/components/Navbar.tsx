@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { isAdmin } = useAuth()
+  const { user, logout, isAdmin } = useAuth()
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -61,9 +61,27 @@ const Navbar = () => {
                 0
               </span>
             </Link>
-            <Link href="/login" className="text-secondary hover:text-accent transition-colors">
-              <User size={24} />
-            </Link>
+            
+            {user ? (
+               <div className="flex items-center gap-4 border-l border-primary/30 pl-6">
+                  <div className="flex flex-col items-end">
+                     <span className="text-xs font-bold text-secondary leading-none">{user.name}</span>
+                     <span className="text-[10px] text-accent font-bold uppercase tracking-tighter mt-1">
+                        {user.role}
+                     </span>
+                  </div>
+                  <button 
+                     onClick={() => { logout(); window.location.href = '/' }}
+                     className="p-2 text-secondary/40 hover:text-red-500 transition-colors"
+                  >
+                     <User size={20} className="fill-current opacity-20" />
+                  </button>
+               </div>
+            ) : (
+               <Link href="/login" className="text-secondary hover:text-accent transition-colors">
+                  <User size={24} />
+               </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
