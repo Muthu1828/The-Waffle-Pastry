@@ -28,7 +28,7 @@ const Hero = () => {
               transition={{ delay: 0.5 }}
               className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase mx-auto md:mx-0"
             >
-              Homemade with Love
+              Crafted with Love • Baked Fresh Daily
             </motion.span>
             <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight text-center md:text-left">
               Deliciousness <br />
@@ -51,12 +51,12 @@ const Hero = () => {
 
           <div className="flex items-center gap-8 pt-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-secondary">50+</p>
-              <p className="text-xs text-secondary/50 uppercase tracking-wider">Flavors</p>
+              <p className="text-2xl font-bold text-secondary">25+</p>
+              <p className="text-xs text-secondary/50 uppercase tracking-wider">Signature Creations</p>
             </div>
             <div className="w-[1px] h-10 bg-secondary/10" />
             <div className="text-center">
-              <p className="text-2xl font-bold text-secondary">10k+</p>
+              <p className="text-2xl font-bold text-secondary">1000+</p>
               <p className="text-xs text-secondary/50 uppercase tracking-wider">Happy Foodies</p>
             </div>
             <div className="w-[1px] h-10 bg-secondary/10" />

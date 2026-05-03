@@ -14,7 +14,11 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
   const router = useRouter()
-  const [isPaused, setIsPaused] = useState(false)
+  
+  const [isPausedSpecials, setIsPausedSpecials] = useState(false)
+  const [isPausedCatsRow1, setIsPausedCatsRow1] = useState(false)
+  const [isPausedCatsRow2, setIsPausedCatsRow2] = useState(false)
+  
   const [categories, setCategories] = useState<any[]>([])
 
   useEffect(() => {
@@ -28,65 +32,106 @@ const HomePage = () => {
         setLoading(false)
       }
     }
+    const fetchCategories = async () => {
+      try {
+        const { data } = await API.get('/categories')
+        setCategories(data)
+      } catch (err) {
+        console.error('Failed to load categories')
+      }
+    }
     fetchProducts()
     fetchCategories()
   }, [])
 
-  const fetchCategories = async () => {
-    try {
-      const { data } = await API.get('/categories')
-      // Map basic colors for the first few categories
-      const colors = ['bg-pink-100', 'bg-orange-100', 'bg-yellow-100', 'bg-blue-100', 'bg-green-100']
-      const icons = ['🎂', '🧇', '🥐', '🍟', '🥤', '🍰']
-      const formatted = data.map((c: any, i: number) => ({
-        name: c.name,
-        icon: icons[i % icons.length],
-        color: colors[i % colors.length]
-      }))
-      setCategories(formatted)
-    } catch (err) {
-      console.error('Failed to load categories')
-    }
-  }
-
+  // Split categories for the two rows
+  const row1Categories = categories.filter((_, i) => i % 2 === 0)
+  const row2Categories = categories.filter((_, i) => i % 2 !== 0)
 
   return (
     <div className="space-y-24 pb-24 bg-[#FFF8F0]/30 overflow-x-hidden">
       <Hero />
 
-      {/* Categories Section */}
-      <motion.section 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-      >
-        <div className="flex justify-between items-end mb-12">
+      {/* Categories Section with Dual-Row Sliders */}
+      <section className="space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-end">
           <div>
             <h2 className="font-heading text-4xl font-bold text-secondary">Browse by Category</h2>
-            <p className="text-secondary/50 mt-2">Discover our delicious range of treats</p>
+            <p className="text-secondary/50 mt-2">Explore our delicious range across all varieties</p>
           </div>
           <Link href="/shop" className="text-accent font-bold uppercase tracking-widest text-xs flex items-center gap-2 hover:underline">
-            View All Menu <ChevronRight size={16} />
+            Full Menu <ChevronRight size={16} />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {categories.map((cat) => (
-            <button 
-              key={cat.name} 
-              onClick={() => router.push(`/shop?category=${cat.name}`)}
-              className="group relative h-48 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border-2 border-transparent hover:border-accent"
+        <div className="space-y-6">
+          {/* Row 1: Sliding Left to Right */}
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsPausedCatsRow1(true)}
+            onMouseLeave={() => setIsPausedCatsRow1(false)}
+          >
+            <motion.div 
+              className="flex gap-6 px-4"
+              initial={{ x: "-100%" }}
+              animate={isPausedCatsRow1 ? { x: "-100%" } : { x: "0%" }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              style={{ width: "fit-content" }}
             >
-              <div className={`absolute inset-0 ${cat.color} opacity-40 group-hover:scale-110 transition-transform duration-500`} />
-              <div className="relative h-full p-8 flex flex-col justify-center items-center text-center space-y-4">
-                <span className="text-5xl group-hover:scale-125 transition-transform duration-500">{cat.icon}</span>
-                <h3 className="font-heading text-2xl font-bold text-secondary">{cat.name}</h3>
-              </div>
-            </button>
-          ))}
+              {[...row1Categories, ...row1Categories, ...row1Categories, ...row1Categories].map((cat, i) => (
+                <button 
+                  key={`${cat._id}-${i}`}
+                  onClick={() => router.push(`/shop?category=${cat.name}`)}
+                  className="w-72 h-44 flex-shrink-0 bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border-2 border-primary/5 hover:border-accent relative group"
+                >
+                  {cat.image ? (
+                    <img src={cat.image} alt={cat.name} className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700" />
+                  ) : (
+                    <div className="absolute inset-0 bg-accent/5" />
+                  )}
+                  <div className="relative h-full flex flex-col justify-center items-center text-center p-6 space-y-3">
+                    <h3 className="font-heading text-2xl font-bold text-secondary group-hover:text-accent transition-colors">{cat.name}</h3>
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">Explore Category</span>
+                  </div>
+                </button>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Row 2: Sliding Right to Left */}
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsPausedCatsRow2(true)}
+            onMouseLeave={() => setIsPausedCatsRow2(false)}
+          >
+            <motion.div 
+              className="flex gap-6 px-4"
+              initial={{ x: "0%" }}
+              animate={isPausedCatsRow2 ? { x: "0%" } : { x: "-100%" }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+              style={{ width: "fit-content" }}
+            >
+              {[...row2Categories, ...row2Categories, ...row2Categories, ...row2Categories].map((cat, i) => (
+                <button 
+                  key={`${cat._id}-${i}`}
+                  onClick={() => router.push(`/shop?category=${cat.name}`)}
+                  className="w-72 h-44 flex-shrink-0 bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border-2 border-primary/5 hover:border-accent relative group"
+                >
+                  {cat.image ? (
+                    <img src={cat.image} alt={cat.name} className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700" />
+                  ) : (
+                    <div className="absolute inset-0 bg-primary/5" />
+                  )}
+                  <div className="relative h-full flex flex-col justify-center items-center text-center p-6 space-y-3">
+                    <h3 className="font-heading text-2xl font-bold text-secondary group-hover:text-accent transition-colors">{cat.name}</h3>
+                    <span className="text-[10px] font-bold text-accent uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">Explore Category</span>
+                  </div>
+                </button>
+              ))}
+            </motion.div>
+          </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* Stunning Auto-Slider Specials */}
       <section className="bg-[#4A2C2A]/5 py-32 overflow-hidden">
@@ -108,13 +153,17 @@ const HomePage = () => {
               <Loader2 className="animate-spin text-accent" size={48} />
            </div>
         ) : (
-          <div className="relative" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+          <div 
+            className="relative" 
+            onMouseEnter={() => setIsPausedSpecials(true)} 
+            onMouseLeave={() => setIsPausedSpecials(false)}
+          >
             {/* The Infinite Scrolling Slider */}
             <motion.div 
               className="flex gap-8 px-4"
               initial={{ x: 0 }}
-              animate={isPaused ? {} : { x: "-100%" }}
-              transition={{ 
+              animate={isPausedSpecials ? { x: 0 } : { x: "-100%" }}
+              transition={isPausedSpecials ? { duration: 0 } : { 
                 duration: 30, 
                 repeat: Infinity, 
                 ease: "linear" 
