@@ -19,7 +19,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-primary/70 text-sm leading-relaxed">
-              Serving handcrafted gourmet waffles, elegant cakes, and artisanal pastries since 2026. Every bite is a piece of heaven.
+              Freshly baked happiness, crafted with passion and served with love. From creamy cakes to crispy waffles, every bite is a moment worth savoring.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-accent transition-colors"><Instagram size={20} /></a>

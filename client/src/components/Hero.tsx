@@ -19,23 +19,23 @@ const Hero = () => {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="space-y-8 flex flex-col items-start text-left"
+          className="space-y-8 flex flex-col items-center text-center md:items-start md:text-left"
         >
           <div className="space-y-4 w-full">
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase"
+              className="inline-block px-4 py-1 bg-accent/10 text-accent rounded-full text-sm font-semibold tracking-wide uppercase mx-auto md:mx-0"
             >
               Homemade with Love
             </motion.span>
-            <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight text-center md:w-fit">
-              Delicious <br />
+            <h1 className="font-heading text-5xl md:text-7xl font-bold text-secondary leading-tight text-center md:text-left">
+              Deliciousness <br />
               <span className="text-accent italic">In Every Bite</span>
             </h1>
-            <p className="text-secondary/70 text-lg md:text-xl max-w-lg leading-relaxed">
-              Experience the perfect crunch of our gourmet waffles and the silky sweetness of our premium cakes. Freshly baked, every single day.
+            <p className="text-secondary/70 text-lg md:text-xl max-w-lg leading-relaxed mx-auto md:mx-0">
+              Experience the warmth of freshly baked Cakes, Waffles, and handcrafted pastries made with love and care. Every creation is prepared fresh to bring you comfort, joy, and a taste you’ll always remember.
             </p>
           </div>
 
